@@ -51,6 +51,8 @@ class RusprofileSpider(scrapy.Spider):
             'ogrn': response.css('#clip_ogrn::text').get(),
             'okpo': response.xpath('//*[@id="anketa"]/div[2]/div[2]/dl/dd[1]/span[1]/text()').get(),
             'status': self._get_company_status(response.css('div.company-status')),
+            'reg_date': response.xpath('//*[@id="anketa"]/div[2]/div[1]/div[1]/div[2]/dl[1]/dd/text()').get(),
+            'auth_capital': response.xpath('//*[@id="anketa"]/div[2]/div[1]/div[1]/div[2]/dl[2]/dd/span/text()').get(),
         }
 
     def _get_company_status(self, node):
