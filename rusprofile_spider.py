@@ -37,7 +37,7 @@ class RusprofileSpider(scrapy.Spider):
 
         Парсит каталог постранично, для каждой компании
         вызывает self.parse_company_page.
-    
+
         """
         for company in response.css('div.company-item'):
             company_page = company.css(
@@ -55,7 +55,7 @@ class RusprofileSpider(scrapy.Spider):
         """Парсинг страницу компании.
 
         Все данные приводятся к виду в таблице.
-        
+
         Также проверяет валидность ОГРН:
         при скрапинге сервер генерирует капчу с рандомными данными.
 
@@ -89,10 +89,10 @@ class RusprofileSpider(scrapy.Spider):
     @staticmethod
     def validate_ogrn(ogrn):
         """Валидация ОГРН.
-        
+
         Returns:
             Логическое значение.
-    
+
         Examples:
             >>> RusprofileSpider.validate_ogrn('1202700008378')
             True
