@@ -51,13 +51,19 @@ class RusprofileSpider(scrapy.Spider):
         if next_page is not None:
             yield response.follow(next_page, self.parse)
 
+    def response_is_ban(self, request, response):
+        if 'id' in request.url:
+            ogrn = response.xpath('//*[@id="clip_ogrn"]/text()').get()
+            if not self.validate_ogrn(ogrn):
+                return True
+        return 'Активность с вашего IP-адреса'.encode() in response.body
+
     def parse_company_page(self, response):
         """Парсинг страницу компании.
 
         Все данные приводятся к виду в таблице.
 
-        Также проверяет валидность ОГРН:
-        при скрапинге сервер генерирует капчу с рандомными данными.
+        Также проверяет валидность ОГРН.
 
         """
         data = {
@@ -83,8 +89,6 @@ class RusprofileSpider(scrapy.Spider):
 
         if self.validate_ogrn(data['ogrn']):
             yield data
-        else:
-            self.logger.error('\ninvalid identifier %s\n', data['ogrn'])
 
     @staticmethod
     def validate_ogrn(ogrn):
